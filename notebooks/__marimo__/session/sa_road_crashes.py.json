@@ -1,0 +1,182 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.6",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "8ed3dd5682a4edab2f02ef7bdfa33523",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "calo",
+      "code_hash": "5914a0088396310f7e0a87d9f0a91151",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-around;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-stat data-value='&quot;2012 \u2013 2024&quot;' data-label='&quot;\ud83d\udcc5 Data Period&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;291,017&quot;' data-label='&quot;\ud83d\udca5 Total Crashes&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;2,007&quot;' data-label='&quot;\ud83d\udc80 Total Fatalities&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;15,616&quot;' data-label='&quot;\ud83c\udfe5 Serious Injuries&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat><marimo-stat data-value='&quot;116,900&quot;' data-label='&quot;\ud83d\ude91 Total Casualties&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "cqOi",
+      "code_hash": "d6b3bc53114a4ad4b62ea5ddcd400e25",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"crash-severity-trends\">\ud83d\udcc8 Crash Severity Trends</h2>\n<span class=\"paragraph\">How crash outcomes \u2014 fatalities, serious injuries, and minor injuries \u2014 have changed across South Australia over the selected period.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SRIo",
+      "code_hash": "39549a31a3eb55ab6b8d56fb2d9a2321",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='SRIo-0' random-id='f82fa22a-ddb9-1d5b-3cc9-de21b70c828f'><marimo-range-slider data-initial-value='[2012,2024]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;\ud83d\udcc5 Year Range&lt;/span&gt;&lt;/span&gt;&quot;' data-start='2012' data-stop='2024' data-step='1' data-steps='[]' data-debounce='true' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-full-width='false' data-disabled='false'></marimo-range-slider></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PjxT",
+      "code_hash": "d81f6add2c9788584d9bfd8fca6d32b3",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>\ud83d\udcc5 Selected: 2012 \u2013 2024</strong></span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "UoEx",
+      "code_hash": "07a70a1455c1f321e1e94ee68f906776",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vClV",
+      "code_hash": "c2597f8790be8f0db2a150b85c423543",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"high-risk-locations\">\ud83d\udccd High Risk Locations</h2>\n<span class=\"paragraph\">The top 20 suburbs ranked by total crash volume. Use this to identify geographic hotspots across South Australia.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "VEZN",
+      "code_hash": "b9edf2914ef9c7160abd856bc9c5f4ed",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='VEZN-0' random-id='2a51106f-b4e9-a247-b1a5-b1a7fd1074aa'><marimo-table data-initial-value='[]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;\ud83d\udccd Top 20 High Risk Locations&lt;/span&gt;&lt;/span&gt;&quot;' data-data='&quot;[{&#92;&quot;&#92;&quot;:0,&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;suburb&#92;&quot;:&#92;&quot;ADELAIDE&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF ADELAIDE&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5000&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:11545,&#92;&quot;total_fatalities&#92;&quot;:15.0,&#92;&quot;total_serious_injuries&#92;&quot;:394.0,&#92;&quot;total_minor_injuries&#92;&quot;:3474.0,&#92;&quot;total_casualties&#92;&quot;:3883.0,&#92;&quot;fatal_crashes&#92;&quot;:15.0,&#92;&quot;serious_injury_crashes&#92;&quot;:381.0,&#92;&quot;minor_injury_crashes&#92;&quot;:3107.0,&#92;&quot;pdo_crashes&#92;&quot;:8042.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.13,&#92;&quot;dui_rate_pct&#92;&quot;:2.28,&#92;&quot;avg_longitude&#92;&quot;:1328431.442536,&#92;&quot;avg_latitude&#92;&quot;:1670527.965288},{&#92;&quot;&#92;&quot;:22,&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;suburb&#92;&quot;:&#92;&quot;PROSPECT&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF PROSPECT&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5082&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:3425,&#92;&quot;total_fatalities&#92;&quot;:9.0,&#92;&quot;total_serious_injuries&#92;&quot;:84.0,&#92;&quot;total_minor_injuries&#92;&quot;:1094.0,&#92;&quot;total_casualties&#92;&quot;:1187.0,&#92;&quot;fatal_crashes&#92;&quot;:9.0,&#92;&quot;serious_injury_crashes&#92;&quot;:77.0,&#92;&quot;minor_injury_crashes&#92;&quot;:926.0,&#92;&quot;pdo_crashes&#92;&quot;:2413.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.263,&#92;&quot;dui_rate_pct&#92;&quot;:2.1,&#92;&quot;avg_longitude&#92;&quot;:1328101.402307,&#92;&quot;avg_latitude&#92;&quot;:1675841.638952},{&#92;&quot;&#92;&quot;:94,&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;suburb&#92;&quot;:&#92;&quot;NORWOOD&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CC OF NORWOOD,PAYNEHAM &amp; ST PETERS&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5067&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2856,&#92;&quot;total_fatalities&#92;&quot;:5.0,&#92;&quot;total_serious_injuries&#92;&quot;:67.0,&#92;&quot;total_minor_injuries&#92;&quot;:844.0,&#92;&quot;total_casualties&#92;&quot;:916.0,&#92;&quot;fatal_crashes&#92;&quot;:5.0,&#92;&quot;serious_injury_crashes&#92;&quot;:67.0,&#92;&quot;minor_injury_crashes&#92;&quot;:733.0,&#92;&quot;pdo_crashes&#92;&quot;:2051.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.175,&#92;&quot;dui_rate_pct&#92;&quot;:1.16,&#92;&quot;avg_longitude&#92;&quot;:1331276.822142,&#92;&quot;avg_latitude&#92;&quot;:1670819.630583},{&#92;&quot;&#92;&quot;:178,&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;suburb&#92;&quot;:&#92;&quot;GEPPS CROSS&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF PORT ADELAIDE ENFIELD&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5094&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2740,&#92;&quot;total_fatalities&#92;&quot;:3.0,&#92;&quot;total_serious_injuries&#92;&quot;:60.0,&#92;&quot;total_minor_injuries&#92;&quot;:814.0,&#92;&quot;total_casualties&#92;&quot;:877.0,&#92;&quot;fatal_crashes&#92;&quot;:3.0,&#92;&quot;serious_injury_crashes&#92;&quot;:57.0,&#92;&quot;minor_injury_crashes&#92;&quot;:655.0,&#92;&quot;pdo_crashes&#92;&quot;:2025.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.109,&#92;&quot;dui_rate_pct&#92;&quot;:1.53,&#92;&quot;avg_longitude&#92;&quot;:1328924.830099,&#92;&quot;avg_latitude&#92;&quot;:1679536.037664},{&#92;&quot;&#92;&quot;:288,&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;suburb&#92;&quot;:&#92;&quot;NORTH ADELAIDE&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF ADELAIDE&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5006&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2713,&#92;&quot;total_fatalities&#92;&quot;:2.0,&#92;&quot;total_serious_injuries&#92;&quot;:96.0,&#92;&quot;total_minor_injuries&#92;&quot;:935.0,&#92;&quot;total_casualties&#92;&quot;:1033.0,&#92;&quot;fatal_crashes&#92;&quot;:2.0,&#92;&quot;serious_injury_crashes&#92;&quot;:94.0,&#92;&quot;minor_injury_crashes&#92;&quot;:819.0,&#92;&quot;pdo_crashes&#92;&quot;:1798.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.074,&#92;&quot;dui_rate_pct&#92;&quot;:1.62,&#92;&quot;avg_longitude&#92;&quot;:1328383.149069,&#92;&quot;avg_latitude&#92;&quot;:1672557.517661},{&#92;&quot;&#92;&quot;:55,&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;suburb&#92;&quot;:&#92;&quot;MORPHETT VALE&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF ONKAPARINGA&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5162&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2546,&#92;&quot;total_fatalities&#92;&quot;:6.0,&#92;&quot;total_serious_injuries&#92;&quot;:98.0,&#92;&quot;total_minor_injuries&#92;&quot;:943.0,&#92;&quot;total_casualties&#92;&quot;:1047.0,&#92;&quot;fatal_crashes&#92;&quot;:6.0,&#92;&quot;serious_injury_crashes&#92;&quot;:96.0,&#92;&quot;minor_injury_crashes&#92;&quot;:758.0,&#92;&quot;pdo_crashes&#92;&quot;:1686.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.236,&#92;&quot;dui_rate_pct&#92;&quot;:4.08,&#92;&quot;avg_longitude&#92;&quot;:1320948.623053,&#92;&quot;avg_latitude&#92;&quot;:1649728.831743},{&#92;&quot;&#92;&quot;:40,&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;suburb&#92;&quot;:&#92;&quot;MOUNT GAMBIER&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CC MT.GAMBIER.                &#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5290&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2459,&#92;&quot;total_fatalities&#92;&quot;:7.0,&#92;&quot;total_serious_injuries&#92;&quot;:134.0,&#92;&quot;total_minor_injuries&#92;&quot;:686.0,&#92;&quot;total_casualties&#92;&quot;:827.0,&#92;&quot;fatal_crashes&#92;&quot;:7.0,&#92;&quot;serious_injury_crashes&#92;&quot;:129.0,&#92;&quot;minor_injury_crashes&#92;&quot;:537.0,&#92;&quot;pdo_crashes&#92;&quot;:1786.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.285,&#92;&quot;dui_rate_pct&#92;&quot;:2.85,&#92;&quot;avg_longitude&#92;&quot;:1510271.44557,&#92;&quot;avg_latitude&#92;&quot;:1340382.639671},{&#92;&quot;&#92;&quot;:289,&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;suburb&#92;&quot;:&#92;&quot;MAWSON LAKES&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF SALISBURY&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5095&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2438,&#92;&quot;total_fatalities&#92;&quot;:2.0,&#92;&quot;total_serious_injuries&#92;&quot;:61.0,&#92;&quot;total_minor_injuries&#92;&quot;:758.0,&#92;&quot;total_casualties&#92;&quot;:821.0,&#92;&quot;fatal_crashes&#92;&quot;:2.0,&#92;&quot;serious_injury_crashes&#92;&quot;:53.0,&#92;&quot;minor_injury_crashes&#92;&quot;:631.0,&#92;&quot;pdo_crashes&#92;&quot;:1752.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.082,&#92;&quot;dui_rate_pct&#92;&quot;:1.93,&#92;&quot;avg_longitude&#92;&quot;:1329745.067017,&#92;&quot;avg_latitude&#92;&quot;:1683734.021388},{&#92;&quot;&#92;&quot;:56,&#92;&quot;_marimo_row_id&#92;&quot;:8,&#92;&quot;suburb&#92;&quot;:&#92;&quot;WINGFIELD&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;CITY OF PORT ADELAIDE ENFIELD&#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5013&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2414,&#92;&quot;total_fatalities&#92;&quot;:6.0,&#92;&quot;total_serious_injuries&#92;&quot;:56.0,&#92;&quot;total_minor_injuries&#92;&quot;:579.0,&#92;&quot;total_casualties&#92;&quot;:641.0,&#92;&quot;fatal_crashes&#92;&quot;:6.0,&#92;&quot;serious_injury_crashes&#92;&quot;:52.0,&#92;&quot;minor_injury_crashes&#92;&quot;:502.0,&#92;&quot;pdo_crashes&#92;&quot;:1854.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.249,&#92;&quot;dui_rate_pct&#92;&quot;:1.57,&#92;&quot;avg_longitude&#92;&quot;:1325074.495807,&#92;&quot;avg_latitude&#92;&quot;:1679810.634554},{&#92;&quot;&#92;&quot;:123,&#92;&quot;_marimo_row_id&#92;&quot;:9,&#92;&quot;suburb&#92;&quot;:&#92;&quot;MOUNT BARKER&#92;&quot;,&#92;&quot;lga_name&#92;&quot;:&#92;&quot;DC MT.BARKER.                 &#92;&quot;,&#92;&quot;postcode&#92;&quot;:&#92;&quot;5251&#92;&quot;,&#92;&quot;total_crashes&#92;&quot;:2068,&#92;&quot;total_fatalities&#92;&quot;:4.0,&#92;&quot;total_serious_injuries&#92;&quot;:67.0,&#92;&quot;total_minor_injuries&#92;&quot;:742.0,&#92;&quot;total_casualties&#92;&quot;:813.0,&#92;&quot;fatal_crashes&#92;&quot;:4.0,&#92;&quot;serious_injury_crashes&#92;&quot;:62.0,&#92;&quot;minor_injury_crashes&#92;&quot;:589.0,&#92;&quot;pdo_crashes&#92;&quot;:1413.0,&#92;&quot;fatality_rate_pct&#92;&quot;:0.193,&#92;&quot;dui_rate_pct&#92;&quot;:3.14,&#92;&quot;avg_longitude&#92;&quot;:1351663.814805,&#92;&quot;avg_latitude&#92;&quot;:1653630.608148}]&quot;' data-total-rows='20' data-total-columns='16' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;suburb&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;lga_name&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;postcode&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;total_crashes&quot;,[&quot;integer&quot;,&quot;int64&quot;]],[&quot;total_fatalities&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;total_serious_injuries&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;total_minor_injuries&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;total_casualties&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;fatal_crashes&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;serious_injury_crashes&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;minor_injury_crashes&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;pdo_crashes&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;fatality_rate_pct&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;dui_rate_pct&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;avg_longitude&quot;,[&quot;number&quot;,&quot;float64&quot;]],[&quot;avg_latitude&quot;,[&quot;number&quot;,&quot;float64&quot;]]]' data-selection='&quot;multi&quot;' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-has-stable-row-id='true' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZBlj",
+      "code_hash": "05fdd8318e0051ae9aeafe36b54d9445",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"crash-conditions-analysis\">\ud83c\udf26\ufe0f Crash Conditions Analysis</h2>\n<span class=\"paragraph\">Breakdown of crashes by weather, road surface, moisture, and lighting conditions. Covers the full dataset period.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "tGfR",
+      "code_hash": "a4e84741262fd35a5c82c238aae72325",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "ySYO",
+      "code_hash": "d04acf5c02127c8f02031f167b1d91ba",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"casualty-demographics\">\ud83d\udc64 Casualty Demographics</h2>\n<span class=\"paragraph\">Casualties grouped by age and type (Driver, Passenger, Rider, Pedestrian) across the selected year range.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "pcwN",
+      "code_hash": "1137cdf23333499bfc1d6360a74a403c",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "CVZO",
+      "code_hash": "b761a08ff37891cdf49bb682a672c6b1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"vehicle-analysis\">\ud83d\ude97 Vehicle Analysis</h2>\n<span class=\"paragraph\">Top 10 vehicle types by involvement, coloured by total casualties. Filtered by the selected year range.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "IWPZ",
+      "code_hash": "86e38eaad6af9c26a861c4c5099fd3fa",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vmuY",
+      "code_hash": "adf1191982028347704c7555db140398",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<div style=\"text-align: center; color: grey; font-size: 0.85em; padding: 1rem 0;\">\n\n\ud83d\udcca **SafeRoads SA** \u2014 South Australia Road Crash Analytics Dashboard\n\nData sourced from the [South Australian Government Open Data Portal](https://data.sa.gov.au)\n\nBuilt with \ud83e\udd86 DuckDB \u00b7 \ud83d\udd27 dbt \u00b7 \ud83c\udf0a Marimo \u00b7 \ud83d\udc0d Python\n\n[GitHub Repository](https://github.com/shresthayujan/saferoads-sa)\n\n</div></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "zqdH",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    }
+  ]
+}

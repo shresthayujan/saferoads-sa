@@ -1,0 +1,38 @@
+# Virtual environment
+.venv/
+
+# Data files
+warehouse/
+*.csv
+*.parquet
+*.db
+
+# Logs
+logs/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# dbt
+dbt_project/target/
+dbt_project/logs/
+dbt_project/.user.yml
+
+# Environment variables
+.env
+
+ # Raw data and warehouse
+data/
+warehouse/*.duckdb
+
+# dbt artifacts
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/

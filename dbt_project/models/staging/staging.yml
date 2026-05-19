@@ -1,0 +1,127 @@
+version: 2
+
+models:
+
+  - name: stg_crash
+    description: >
+      Cleaned and standardised crash records from the South Australia
+      road crash dataset. One row per crash event. Covers 2012–2024.
+    columns:
+      - name: report_id
+        description: Unique identifier for each crash report.
+        tests:
+          - unique
+          - not_null
+
+      - name: crash_year
+        description: Year the crash occurred.
+        tests:
+          - not_null
+
+      - name: csef_severity
+        description: Crash severity rating assigned by SA Police.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['1: PDO', '2: MI', '3: SI', '4: Fatal']
+
+      - name: day_or_night
+        description: >
+          Whether the crash occurred during daylight or at night.
+          Source values are 'Daylight' and 'Night'.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Daylight', 'Night']
+
+      - name: dui_involved
+        description: True if the crash involved a driver under the influence of alcohol.
+        tests:
+          - not_null
+
+      - name: drugs_involved
+        description: True if the crash involved a driver under the influence of drugs.
+        tests:
+          - not_null
+
+      - name: total_fatalities
+        description: Number of fatalities resulting from the crash.
+        tests:
+          - not_null
+
+      - name: total_casualties
+        description: Total number of casualties (fatalities + injuries).
+        tests:
+          - not_null
+
+  - name: stg_casualty
+    description: >
+      Cleaned casualty records linked to crash reports.
+      One row per person recorded as a casualty in a crash.
+    columns:
+      - name: report_id
+        description: Foreign key linking to stg_crash.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_crash')
+                field: report_id
+
+      - name: casualty_type
+        description: >
+          Role of the casualty in the crash.
+          Note: SA Government uses 'Rider' to cover both motorcycle
+          riders and pedal cyclists. 'Pillion Passenger' and
+          'Motor Cyclist' do not appear in this dataset.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Driver'
+                  - 'Passenger'
+                  - 'Pedestrian'
+                  - 'Rider'
+
+      - name: hospitalised
+        description: True if the casualty was admitted to hospital.
+        tests:
+          - not_null
+
+      - name: thrown_out
+        description: True if the casualty was thrown from the vehicle.
+        tests:
+          - not_null
+
+  - name: stg_units
+    description: >
+      Cleaned vehicle and unit records linked to crash reports.
+      One row per vehicle or road user unit involved in a crash.
+    columns:
+      - name: report_id
+        description: Foreign key linking to stg_crash.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_crash')
+                field: report_id
+      - name: unit_type
+        description: >
+          Classification of the vehicle or road user.
+          One NULL value exists in the source data out of 291,017 rows
+          (0.0003%) — treated as an acceptable data entry gap.
+        tests:
+          - not_null:
+              config:
+                severity: warn
+      - name: rolled_over
+        description: True if the vehicle rolled over during the crash.
+        tests:
+          - not_null
+      - name: caught_fire
+        description: True if the vehicle caught fire during the crash.
+        tests:
+          - not_null

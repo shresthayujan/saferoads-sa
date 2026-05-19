@@ -1,0 +1,29 @@
+name: 'saferoads_sa'
+version: '1.0.0'
+config-version: 2
+
+profile: 'saferoads_sa'
+
+# Paths
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configurations
+models:
+  saferoads_sa:
+    staging:
+      +materialized: view       # views
+      +schema: staging          # staging schema in DuckDB
+    marts:
+      +materialized: table      # Tables for performance
+      +schema: marts            # Written to the 'marts' schema
+

@@ -1,0 +1,69 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw road crash tables loaded by the Phase 1 ingestion pipeline"
+    schema: main
+
+    tables:
+      - name: raw_crash
+        description: >
+          One row per crash event recorded in South Australia.
+          Covers all years available from data.sa.gov.au.
+        columns:
+          - name: report_id
+            description: "Unique identifier for each crash report"
+          - name: crash_date_time
+            description: "Date and time of the crash (parsed datetime)"
+          - name: csef_severity
+            description: "Crash severity classification (Fatal, Serious, Minor, PDO)"
+          - name: suburb
+            description: "Suburb where the crash occurred"
+          - name: lga_name
+            description: "Local Government Area of the crash"
+          - name: postcode
+            description: "Postcode of the crash location"
+          - name: crash_type
+            description: "Type of crash (e.g. Rear end, Hit object, Roll over)"
+          - name: dui_involved
+            description: "Whether alcohol (DUI) was involved (Y/N)"
+          - name: drugs_involved
+            description: "Whether drugs were involved (Y/N)"
+          - name: accloc_x
+            description: "Longitude coordinate of crash location"
+          - name: accloc_y
+            description: "Latitude coordinate of crash location"
+
+      - name: raw_casualty
+        description: >
+          One row per person injured or killed in a crash.
+          Linked to raw_crash via report_id.
+        columns:
+          - name: report_id
+            description: "Foreign key linking to raw_crash"
+          - name: casualty_type
+            description: "Type of casualty (Driver, Passenger, Pedestrian, Cyclist, etc.)"
+          - name: sex
+            description: "Sex of the casualty"
+          - name: age
+            description: "Age of the casualty"
+          - name: injury_extent
+            description: "Severity of injury (Fatal, Serious, Minor)"
+
+      - name: raw_units
+        description: >
+          One row per vehicle (unit) involved in a crash.
+          Linked to raw_crash via report_id.
+        columns:
+          - name: report_id
+            description: "Foreign key linking to raw_crash"
+          - name: unit_type
+            description: "Type of vehicle/unit (Car, Truck, Motorcycle, Bicycle, etc.)"
+          - name: veh_year
+            description: "Year of manufacture of the vehicle"
+          - name: sex
+            description: "Sex of the driver/rider"
+          - name: age
+            description: "Age of the driver/rider"
+          - name: rollover
+            description: "Whether the vehicle rolled over (Y/N)"

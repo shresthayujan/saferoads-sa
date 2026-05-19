@@ -1,0 +1,123 @@
+version: 2
+
+models:
+
+  - name: mart_crash_severity_trends
+    description: >
+      Aggregated crash counts and outcomes by year and severity level.
+      Used for trend analysis over time. One row per year + severity combination.
+    columns:
+      - name: crash_year
+        description: Year of the crashes in this group.
+        tests:
+          - not_null
+
+      - name: csef_severity
+        description: Severity level for this group.
+        tests:
+          - not_null
+
+      - name: total_crashes
+        description: Total number of crashes in this year + severity group.
+        tests:
+          - not_null
+
+      - name: total_fatalities
+        description: Sum of fatalities across all crashes in this group.
+        tests:
+          - not_null
+
+  - name: mart_high_risk_locations
+    description: >
+      Crash and fatality counts aggregated by suburb and LGA.
+      Used to identify high-risk locations across South Australia.
+      One row per suburb + LGA + postcode combination.
+    columns:
+      - name: suburb
+        description: Suburb where the crashes occurred.
+        tests:
+          - not_null
+
+      - name: lga_name
+        description: Local Government Area containing the suburb.
+        tests:
+          - not_null
+
+      - name: total_crashes
+        description: Total crashes recorded in this location.
+        tests:
+          - not_null
+
+  - name: mart_conditions_analysis
+    description: >
+      Crash outcomes aggregated by environmental conditions.
+      Used to identify which road, weather, and lighting conditions
+      produce the worst outcomes. One row per condition combination.
+    columns:
+      - name: weather_condition
+        description: Weather at the time of the crash.
+        tests:
+          - not_null
+
+      - name: road_surface
+        description: Road surface type at the crash location.
+        tests:
+          - not_null
+
+      - name: total_crashes
+        description: Total crashes under this condition combination.
+        tests:
+          - not_null
+
+  - name: mart_casualty_demographics
+    description: >
+      Casualty counts aggregated by age group, sex, and casualty type.
+      Used to understand which population groups are most at risk.
+      One row per age group + sex + casualty type + severity + year.
+    columns:
+      - name: crash_year
+        description: Year of the crashes in this group.
+        tests:
+          - not_null
+
+      - name: age_group
+        description: Age band of the casualties in this group.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Under 18'
+                  - '18–25'
+                  - '26–39'
+                  - '40–59'
+                  - '60–74'
+                  - '75+'
+                  - 'Unknown'
+
+      - name: total_casualties
+        description: Total casualty count in this demographic group.
+        tests:
+          - not_null
+
+  - name: mart_vehicle_analysis
+    description: >
+      Vehicle involvement counts aggregated type and age group.
+      Used to analyse which vehicles are most commonly involved
+      and which have the highest rollover and fire rates.
+      One row per vehicle type + age group + severity + year.
+    columns:
+      - name: crash_year
+        description: Year of the crashes in this group.
+        tests:
+          - not_null
+
+      - name: unit_type
+        description: Classification of the vehicle or road user unit.
+        tests:
+          - not_null
+
+      - name: total_units_involved
+        description: Total vehicle units involved in crashes in this group.
+        tests:
+          - not_null
