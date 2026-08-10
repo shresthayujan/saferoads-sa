@@ -8,7 +8,7 @@ SafeRoads SA is a portfolio project that demonstrates the full modern data stack
 
 ## 🗂️ Project Architecture
 
-```
+```text
 Raw Data (SA Gov CSVs)
         │
         ▼
@@ -56,11 +56,11 @@ Raw Data (SA Gov CSVs)
 | Transformation & Testing | dbt-core · dbt-duckdb |
 | Analytics & Visualisation | Marimo · Altair |
 | Version Control | Git · GitHub |
-| Environment | Zorin OS · Python venv |
+| Environment | Zorin OS / Windows · Python venv |
 
 ## 📁 Project Structure
 
-```
+```text
 saferoads-sa/
 ├── scraper/          # Playwright-based CSV downloader
 ├── ingestion/        # Data cleaning & DuckDB loader
@@ -77,45 +77,94 @@ saferoads-sa/
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 🐧 Linux / macOS
+
+#### 1. Clone the repository
 
 ```bash
 git clone https://github.com/shresthayujan/saferoads-sa.git
 cd saferoads-sa
 ```
 
-### 2. Create and activate virtual environment
+#### 2. Create and activate virtual environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+#### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 playwright install firefox
 ```
 
-### 4. Run the ingestion pipeline
+#### 4. Run the ingestion pipeline
 
 ```bash
 python ingestion/pipeline.py
 ```
 
-### 5. Run dbt transformations
+#### 5. Run dbt transformations
 
 ```bash
 cd dbt_project
 dbt run
 dbt test
+cd ..
 ```
 
-### 6. Launch the Marimo dashboard
+#### 6. Launch the Marimo dashboard
 
 ```bash
 marimo run notebooks/sa_road_crashes.py
+```
+
+---
+
+### 🪟 Windows (PowerShell)
+
+#### 1. Clone the repository
+
+```powershell
+git clone https://github.com/shresthayujan/saferoads-sa.git
+cd saferoads-sa
+```
+
+#### 2. Create and activate virtual environment
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+#### 3. Install dependencies
+
+```powershell
+pip install -r requirements.txt
+playwright install firefox
+```
+
+#### 4. Run the ingestion pipeline
+
+```powershell
+python ingestion\pipeline.py
+```
+
+#### 5. Run dbt transformations
+
+```powershell
+cd dbt_project
+dbt run
+dbt test
+cd ..
+```
+
+#### 6. Launch the Marimo dashboard
+
+```powershell
+marimo run notebooks\sa_road_crashes.py
 ```
 
 ## 📦 Data Source
@@ -124,8 +173,8 @@ Road crash data sourced from the [South Australian Government Open Data Portal](
 
 ## 👤 Author
 
-**Yujan Shrestha**
-Data Engineer
+**Yujan Shrestha**  
+Data Engineer  
 [GitHub](https://github.com/shresthayujan)
 
 ---
