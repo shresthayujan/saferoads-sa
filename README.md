@@ -149,7 +149,7 @@ playwright install firefox
 #### 4. Run the ingestion pipeline
 
 ```powershell
-python ingestion\pipeline.py
+python ingestion\scraper.py
 ```
 
 #### 5. Run dbt transformations
