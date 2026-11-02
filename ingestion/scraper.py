@@ -172,12 +172,10 @@ def select_best_files():
     """
     For each table type (Crash, Casualty, Units):
       - Finds all matching CSV files in data/raw/
-      - Detects which years are covered by multi-year files
-      - Drops single-year files whose year is already covered
-      - If multiple multi-year files overlap, keeps the WIDEST one
-        (this handles future releases like 2019-2025 replacing 2019-2023)
+      - Picks, for every year, the newest release that covers it
+      - Returns each selected file plus the years to take from it
 
-    Returns a dict: { "Crash": [list of paths], "Casualty": [...], ... }
+    Returns a dict: { "Crash": [(path, [years]), ...], "Casualty": [...], ... }
     """
     log.info("=" * 55)
     log.info("STAGE 2 — OVERLAP DETECTION")
@@ -207,25 +205,30 @@ def select_best_files():
         # Sort by range width descending (widest first), then by start year
         parsed.sort(key=lambda x: (-(x[2] - x[1]), x[1]))
 
-        # Skip any file whose years are fully covered
-        covered_years = set()
-        selected = []
-
+        year_source = {}
         for filepath, start, end in parsed:
-            file_years = set(range(start, end + 1))
+            for year in range(start, end + 1):
+                current = year_source.get(year)
+                if current is None or end > current[1]:
+                    year_source[year] = (filepath, end)
 
-            if file_years.issubset(covered_years):
+        by_file = {}
+        for year in sorted(year_source):
+            filepath = year_source[year][0]
+            by_file.setdefault(filepath, []).append(year)
+
+        selected = []
+        for filepath, years in sorted(by_file.items(), key=lambda item: item[1][0]):
+            span = f"{years[0]}–{years[-1]}" if len(years) > 1 else str(years[0])
+            selected.append((filepath, years))
+            log.info(f"  USE: {os.path.basename(filepath)} (years {span})")
+
+        chosen = {filepath for filepath, _ in selected}
+        for filepath, _, _ in parsed:
+            if filepath not in chosen:
                 log.info(
-                    f"  SKIP (fully covered): {os.path.basename(filepath)}"
+                    f"  SKIP (superseded): {os.path.basename(filepath)}"
                 )
-                continue
-
-            selected.append(filepath)
-            covered_years.update(file_years)
-            log.info(
-                f"  USE: {os.path.basename(filepath)} "
-                f"(years {start}–{end})"
-            )
 
         files_to_use[table_type] = selected
         log.info(f"  → {len(selected)} file(s) selected for {table_type}\n")
@@ -260,9 +263,8 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 def merge_and_clean(files_to_use: dict) -> dict:
     """
     For each table type:
-      - Reads and concatenates all selected CSVs
-      - Deduplicates on report_id (and unit/casualty number where relevant)
-      - Cleans column names
+      - Reads and cleans each selected CSV, keeping only the selected years
+      - Concatenates and deduplicates on report_id (and unit/casualty number)
       - Returns a dict of cleaned DataFrames
     """
     log.info("=" * 55)
@@ -272,11 +274,12 @@ def merge_and_clean(files_to_use: dict) -> dict:
     # Deduplicate keys per table
     dedup_keys = {
         "Crash"    : ["report_id"],
-        "Casualty" : ["report_id", "casualty_number"],
-        "Units"    : ["report_id", "und_unit_number"],
+        "Casualty" : ["report_id", "und_unit_number", "casualty_number"],
+        "Units"    : ["report_id", "unit_no"],
     }
 
     master = {}
+    report_ids = None
 
     for table_type in TABLE_TYPES:
         files = files_to_use.get(table_type, [])
@@ -286,15 +289,19 @@ def merge_and_clean(files_to_use: dict) -> dict:
             continue
 
         dfs = []
-        for f in files:
+        for f, years in files:
             log.info(f"  Reading: {os.path.basename(f)}")
-            df = pd.read_csv(f, low_memory=False)
+            df = clean_dataframe(pd.read_csv(f, low_memory=False))
+
+            if table_type == "Crash":
+                df = df[df["year"].isin(years)]
+            elif report_ids is not None:
+                df = df[df["report_id"].isin(report_ids)]
+
             dfs.append(df)
 
         combined = pd.concat(dfs, ignore_index=True)
         rows_before = len(combined)
-
-        combined = clean_dataframe(combined)
 
         # Deduplicate using the most specific key available
         keys = dedup_keys.get(table_type, ["report_id"])
@@ -309,6 +316,9 @@ def merge_and_clean(files_to_use: dict) -> dict:
 
         log.info(f"  {table_type}: {rows_before} rows → {rows_after} rows "
                  f"({rows_before - rows_after} duplicates removed)")
+
+        if table_type == "Crash":
+            report_ids = set(combined["report_id"])
 
         master[table_type] = combined
 
