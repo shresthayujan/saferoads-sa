@@ -1,181 +1,203 @@
-# 🛣️ SafeRoads SA — South Australia Road Crash Analytics
+# SafeRoads SA
 
-An end-to-end Data & Analytics Engineering capstone project built on real South Australian government road-crash data.
 
-## 📌 Project Overview
+An ELT pipeline and analytics layer for South Australian road crash data (2012 to 2025). It scrapes the open data portal, resolves overlapping releases, loads into DuckDB, models with dbt, and serves a Marimo dashboard.
 
-SafeRoads SA is a portfolio project that demonstrates the full modern data stack — from raw data ingestion through to an interactive analytics dashboard. It covers data engineering fundamentals (scraping, cleaning, warehousing) and analytics engineering best practices (modelling, testing, documentation).
 
-## 🗂️ Project Architecture
+![SafeRoads SA dashboard](docs/dashboard.png)
 
-```text
-Raw Data (SA Gov CSVs)
-        │
-        ▼
-┌───────────────────┐
-│  Python Scraper   │  ← Playwright + Pandas
-│  & Ingestion      │     Downloads, cleans, deduplicates CSVs
-└────────┬──────────┘
-         │
-         ▼
-┌───────────────────┐
-│   DuckDB          │  ← Local analytical warehouse
-│   Warehouse       │     raw_crash · raw_casualty · raw_units
-└────────┬──────────┘
-         │
-         ▼
-┌───────────────────┐
-│   dbt             │  ← Staging + Mart models + data tests
-│   Transforms      │     stg_crash · stg_casualty · stg_units
-│                   │     5 mart models
-└────────┬──────────┘
-         │
-         ▼
-┌───────────────────┐
-│   Marimo          │  ← Interactive analytics dashboard
-│   Dashboard       │     KPIs · Charts · Filters
-└───────────────────┘
+
+**Stack:** Python, Playwright, DuckDB, dbt-duckdb, Marimo, Altair
+
+
+**Scale:** 204,860 crashes, 437,279 units, 81,883 casualties
+
+
+---
+
+
+## Architecture
+
+
+```mermaid
+flowchart LR
+    A["data.sa.gov.au<br/>Road Crash Data"] --> B["Playwright scraper<br/>headless Firefox"]
+    B --> C["data/raw<br/>CSV per release"]
+    C --> D["Release resolution<br/>and dedup in pandas"]
+    D --> E[("DuckDB<br/>raw tables")]
+    E --> F["dbt staging<br/>3 views"]
+    F --> G["dbt marts<br/>5 tables"]
+    G --> H["Marimo dashboard"]
 ```
 
-## 📊 Mart Models
 
-| Mart | Description |
-|------|-------------|
-| `mart_crash_severity_trends` | Year-on-year crash severity and DUI/drug trends |
-| `mart_high_risk_locations` | Suburb-level crash hotspot ranking |
-| `mart_conditions_analysis` | Weather, road surface, and lighting breakdown |
-| `mart_casualty_demographics` | Age group, sex, and casualty type analysis |
-| `mart_vehicle_analysis` | Vehicle type involvement and rollover/fire rates |
+| Layer | Responsibility | Materialisation |
+|---|---|---|
+| raw | Deduplicated source data, loaded as delivered | Tables, written by Python |
+| staging | Type casting, renaming, month parsing | Views |
+| marts | Aggregates for analysis | Tables |
 
-## 🧰 Tech Stack
 
-| Layer | Tool |
-|-------|------|
-| Scraping & Ingestion | Python · Playwright · Pandas |
-| Warehouse | DuckDB |
-| Transformation & Testing | dbt-core · dbt-duckdb |
-| Analytics & Visualisation | Marimo · Altair |
-| Version Control | Git · GitHub |
-| Environment | Zorin OS / Windows · Python venv |
+## Data model
 
-## 📁 Project Structure
 
-```text
-saferoads-sa/
-├── scraper/          # Playwright-based CSV downloader
-├── ingestion/        # Data cleaning & DuckDB loader
-├── dbt_project/      # dbt models, tests, and configs
-│   ├── models/
-│   │   ├── staging/  # Cleaned & typed staging models
-│   │   └── marts/    # Analytical mart models
-├── notebooks/        # Marimo interactive dashboard
-├── warehouse/        # Local DuckDB file
-├── config/           # Project configuration files
-├── logs/             # Pipeline run logs
-└── docs/             # Project documentation
+```mermaid
+erDiagram
+    CRASH ||--o{ UNITS : "report_id"
+    CRASH ||--o{ CASUALTY : "report_id"
+    CRASH {
+        string report_id PK
+        int crash_year
+        int crash_month
+        string crash_month_name
+    }
+    UNITS {
+        string report_id FK
+        int unit_no
+    }
+    CASUALTY {
+        string report_id FK
+        int unit_no
+        int casualty_number
+    }
 ```
 
-## 🚀 Getting Started
 
-### 🐧 Linux / macOS
+Grain: one row per crash, one per unit (vehicle or road user) within a crash, and one per casualty within a unit.
 
-#### 1. Clone the repository
+
+### Marts
+
+
+| Model | Grain | Purpose |
+|---|---|---|
+| `mart_crash_severity_trends` | year, severity | Severity trend over time |
+| `mart_high_risk_locations` | suburb, LGA | Crash and fatality concentration |
+| `mart_conditions_analysis` | surface, weather, moisture, lighting | Outcomes by environmental conditions |
+| `mart_casualty_demographics` | age group, sex, casualty type | At-risk groups |
+| `mart_vehicle_analysis` | vehicle type, age group | Vehicle involvement |
+
+
+---
+
+
+## Engineering notes
+
+
+### Overlapping releases
+
+
+The portal publishes single-year files and rolling multi-year files (for example `2018-2022` through `2021-2025`), so the same crash appears in several releases. Naive concatenation produced 356,672 crashes against 204,860 after correction, an inflation of roughly 74%. The pipeline assigns each year to the newest release that covers it, then deduplicates on natural keys:
+
+
+| Table | Unique key |
+|---|---|
+| Crash | `report_id` |
+| Units | `report_id`, `unit_no` |
+| Casualty | `report_id`, `unit_no`, `casualty_number` |
+
+
+Earlier key choices were wrong in both directions (units collapsed to about one per crash, casualties dropped), which is why the tests below exist.
+
+
+### Month parsing
+
+
+The source stores month as text (for example "August"). `stg_crash` converts it to an integer with `try_strptime` for full and abbreviated names, falling back to `try_cast`, and keeps the original in `crash_month_name`. All 204,860 rows resolve to non-null values.
+
+
+### Path handling
+
+
+Paths in `scraper.py` and the notebook are anchored to the project root, so scripts run correctly from any working directory.
+
+
+---
+
+
+## Data quality
+
+
+dbt runs 52 passing checks plus 1 warning on a full build (53 total, including models). The singular tests encode lessons from development:
+
+
+| Test | Guards against |
+|---|---|
+| `assert_no_crash_in_multiple_releases` | Cross-release duplication |
+| `assert_stg_units_unique_key` | Wrong unit grain |
+| `assert_stg_casualty_unique_key` | Wrong casualty grain |
+| `assert_crash_count_reconciles` | Row loss or fan-out between raw and staging (also units and casualty variants) |
+| `assert_units_per_crash_in_range` | Over-deduplication (observed ratio 2.13, bounds 1.5 to 3.0) |
+
+
+The reconciliation tests detect problems introduced in dbt. Scraper-level errors are guarded by the unique-key tests and the units-per-crash ratio.
+
+
+---
+
+
+## Running it
+
 
 ```bash
 git clone https://github.com/shresthayujan/saferoads-sa.git
 cd saferoads-sa
-```
-
-#### 2. Create and activate virtual environment
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-#### 3. Install dependencies
-
-```bash
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 playwright install firefox
-```
 
-#### 4. Run the ingestion pipeline
 
-```bash
-python ingestion/pipeline.py
-```
+python ingestion/scraper.py
 
-#### 5. Run dbt transformations
 
-```bash
-cd dbt_project
-dbt run
-dbt test
-cd ..
-```
+mkdir -p ~/.dbt
+cp dbt_project/profiles.yml.example ~/.dbt/profiles.yml
+cd dbt_project && dbt build && cd ..
 
-#### 6. Launch the Marimo dashboard
 
-```bash
 marimo run notebooks/sa_road_crashes.py
 ```
 
----
 
-### 🪟 Windows (PowerShell)
+Windows (PowerShell): activate with `.venv\Scripts\Activate.ps1` and copy the profile to `$HOME\.dbt\profiles.yml`. Close the dashboard before re-running the pipeline, as DuckDB locks the file.
 
-#### 1. Clone the repository
 
-```powershell
-git clone https://github.com/shresthayujan/saferoads-sa.git
-cd saferoads-sa
-```
+The example profile uses the relative path `../warehouse/saferoads.duckdb`, so run dbt from `dbt_project/`.
 
-#### 2. Create and activate virtual environment
-
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-#### 3. Install dependencies
-
-```powershell
-pip install -r requirements.txt
-playwright install firefox
-```
-
-#### 4. Run the ingestion pipeline
-
-```powershell
-python ingestion\scraper.py
-```
-
-#### 5. Run dbt transformations
-
-```powershell
-cd dbt_project
-dbt run
-dbt test
-cd ..
-```
-
-#### 6. Launch the Marimo dashboard
-
-```powershell
-marimo run notebooks\sa_road_crashes.py
-```
-
-## 📦 Data Source
-
-Road crash data sourced from the [South Australian Government Open Data Portal](https://data.sa.gov.au). Data covers **2012 – 2024** across crash, casualty, and unit records.
-
-## 👤 Author
-
-**Yujan Shrestha**  
-Data Engineer  
-[GitHub](https://github.com/shresthayujan)
 
 ---
-*Built as a capstone portfolio project — 2026*
+
+
+## Known limitations
+
+
+- 2020 has the lowest crash count (11,534), plausibly due to COVID-19 restrictions. This is an interpretation, not something the data states.
+- 5 units have no unit type, producing the single dbt warning (`not_null_stg_units_unit_type`).
+- The scraper depends on the portal's page structure and will need maintenance if the site changes.
+- No orchestration or CI yet.
+
+
+## Repository layout
+
+
+```
+ingestion/        scraper.py: scrape, deduplicate, load to DuckDB
+dbt_project/      models/staging, models/marts, tests, profiles.yml.example
+notebooks/        sa_road_crashes.py (Marimo)
+docs/             dashboard screenshot
+data/raw/         downloaded CSVs (gitignored)
+warehouse/        saferoads.duckdb (gitignored)
+```
+
+
+## Data source
+
+
+[Road Crash Data](https://data.sa.gov.au/data/dataset/road-crash-data), Government of South Australia, licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0).
+
+
+## Author
+
+
+Yujan Shrestha
+Data Engineer

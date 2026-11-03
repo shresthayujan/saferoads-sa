@@ -33,7 +33,12 @@ cleaned as (
 
         -- Date and time
         cast(year as integer) as crash_year,
-        cast(month as integer) as crash_month,
+        coalesce(
+            cast(date_part('month', try_strptime(trim(month) || ' 1 2000', '%B %d %Y')) as integer),
+            cast(date_part('month', try_strptime(trim(month) || ' 1 2000', '%b %d %Y')) as integer),
+            try_cast(month as integer)
+        ) as crash_month,
+        month as crash_month_name,
         cast(day as integer) as crash_day,
         time as crash_time,
         crash_date_time,
