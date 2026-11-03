@@ -10,9 +10,10 @@ def _():
     import duckdb
     import pandas as pd
     import altair as alt
+    from pathlib import Path
 
     # ── Connection ──────────────────────────────────────────────────────────────
-    DB_PATH = "warehouse/saferoads.duckdb"
+    DB_PATH = str(Path(__file__).resolve().parent.parent / "warehouse" / "saferoads.duckdb")
     con = duckdb.connect(DB_PATH, read_only=True)
 
     # ── Load mart tables ─────────────────────────────────────────────────────────

@@ -31,9 +31,10 @@ from playwright.sync_api import sync_playwright
 # ============================================================
 
 # Paths — relative to project root
-RAW_DATA_PATH  = os.path.join("data", "raw")
-WAREHOUSE_PATH = os.path.join("warehouse", "saferoads.duckdb")
-LOG_PATH       = os.path.join("logs", "ingestion.log")
+PROJECT_ROOT   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RAW_DATA_PATH  = os.path.join(PROJECT_ROOT, "data", "raw")
+WAREHOUSE_PATH = os.path.join(PROJECT_ROOT, "warehouse", "saferoads.duckdb")
+LOG_PATH       = os.path.join(PROJECT_ROOT, "logs", "ingestion.log")
 
 # The 3 table types we expect from SA Gov
 TABLE_TYPES = ["Crash", "Casualty", "Units"]
@@ -47,13 +48,13 @@ DATASET_NAME  = "Road Crash Data"
 # ============================================================
 
 os.makedirs(RAW_DATA_PATH, exist_ok=True)
-os.makedirs("logs", exist_ok=True)
+os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler(LOG_PATH),
+        logging.FileHandler(LOG_PATH, encoding="utf-8"),
         logging.StreamHandler()
     ]
 )
@@ -344,7 +345,7 @@ def load_to_duckdb(master: dict):
     log.info("STAGE 4 — LOADING INTO DUCKDB")
     log.info("=" * 55)
 
-    os.makedirs("warehouse", exist_ok=True)
+    os.makedirs(os.path.dirname(WAREHOUSE_PATH), exist_ok=True)
 
     con = duckdb.connect(WAREHOUSE_PATH)
 

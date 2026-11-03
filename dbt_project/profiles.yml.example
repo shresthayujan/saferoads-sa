@@ -1,0 +1,7 @@
+saferoads_sa:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../warehouse/saferoads.duckdb
+      threads: 4
