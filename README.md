@@ -199,4 +199,5 @@ warehouse/        saferoads.duckdb (gitignored)
 ## Author
 
 
-Yujan Shrestha, Data Engineer moving into Analytics Engineering.
+Yujan Shrestha
+Data Engineer
