@@ -137,7 +137,7 @@ The reconciliation tests detect problems introduced in dbt. Scraper-level errors
 
 
 ## Running it
-
+`Requires Python 3.10 to 3.13 (dbt-core 1.11 does not support Python 3.14).`
 
 ```bash
 git clone https://github.com/shresthayujan/saferoads-sa.git
